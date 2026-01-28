@@ -1,5 +1,4 @@
 {
   "name": "Mar Azul Guest Guide",
-  "description": "A responsive and user-friendly web application that provides essential information for guests staying at the Mar Azul property. It includes details on security, amenities, and house rules, with an integrated edit mode to allow for easy content updates directly from the front-end.",
-  "requestFramePermissions": []
+  "description": "A responsive and user-friendly web application that provides essential information for guests staying at the Mar Azul property. It includes details on security, amenities, and house rules, with an integrated edit mode to allow for easy content updates directly from the front-end."
 }
