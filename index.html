@@ -1,19 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mar Azul</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guía para Huéspedes de Mar Azul</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+        .scroll-mt-20 { scroll-margin-top: 5rem; }
+        .is-editing .display-content { display: none; }
+        .is-editing .edit-content { display: block; }
+        .edit-content { display: none; }
+        .admin-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+        .admin-toggle-btn:hover .admin-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
 </head>
-<body>
-    <header>
-        <h1>Welcome to Mar Azul</h1>
-        <div class="hero">
-            <img src="Images/mar-azul.jpg" alt="Mar Azul" loading="lazy" style="position: absolute;">
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <!-- App Container -->
+    <div id="app-container">
+
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-20">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-teal-600">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0 .-..."/>
+                        </svg>
+                        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Guía para Huéspedes</h1>
+                    </div>
+                    <div class="lg:hidden">
+                        <button id="mobile-menu-btn" class="p-2 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-nav-container" class="hidden">
+            <div id="mobile-nav-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 opacity-0"></div>
+            <div id="mobile-nav-panel" class="fixed top-0 left-0 h-full w-full max-w-xs bg-white z-40 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out">
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-slate-900">Navegación</h3>
+                        <button id="mobile-nav-close-btn" class="p-2 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500" aria-label="Cerrar menú móvil">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <ul id="mobile-nav-links" class="space-y-1">
+                        <!-- Mobile nav links will be injected by JS -->
+                    </ul>
+                </div>
+            </div>
         </div>
-    </header>
-    <main>
-        <p>Explore the beauty of Mar Azul.</p>
-    </main>
-</body>
-</html>
+
+        <!-- Hero Section (actualizado: Opción A, imagen como <img> con ruta relativa) -->
+        <div class="relative">
+            <div class="relative h-64 md:h-80 flex items-center justify-center text-white overflow-hidden">
+                <!-- Imagen detrás: ruta relativa (sin leading slash) y lazy loading -->
+                <img src="Images/mar-azul.jpg" alt="Mar Azul" loading="lazy" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover object-center">
+                <!-- overlay para contraste -->
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                <div class="relative text-center px-4">
+                    <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight">Bienvenidos a Mar Azul</h2>
+                    <p class="mt-2 md:mt-4 max-w-2xl mx-auto text-lg md:text-xl opacity-90">Esperamos que disfruten de una estadía tranquila y agradable.</p>
+                </div>
+            </div>
+
+            <!-- Admin Toggle Button -->
+            <div class="fixed bottom-6 right-6 z-10">
+                <button id="admin-toggle-btn" class="admin-toggle-btn relative flex items-center justify-center w-16 h-16 rounded-full text-white shadow-lg transform transition-transform hover:scale-105 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <span id="admin-icon-edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 ..."/>
+                        </svg>
+                    </span>
+                    <span id="admin-icon-save" class="hidden">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                     <div id="admin-tooltip-text" class="admin-tooltip absolute -top-10 right-0 p-2 text-xs text-white rounded-md shadow-md bg-blue-600 whitespace-nowrap">
+                        Editar Info
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                
+                <!-- Desktop Navigation -->
+                <aside class="hidden lg:block lg:col-span-3 lg:sticky top-24 self-start">
+                    <nav class="bg-white rounded-xl shadow-md p-4">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4 px-2">Navegación</h3>
+                        <ul id="desktop-nav-links" class="space-y-1">
+                           <!-- Desktop nav links will be injected by JS -->
+                        </ul>
+                    </nav>
+                </aside>
+
+                <!-- Sections -->
+                <main id="sections-container" class="lg:col-span-9 space-y-8">
+                    <!-- Sections will be injected by JS -->
+                </main>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center text-slate-500 py-8">
+            <p>Esperamos que disfruten su estadía y se sientan como en casa.</p>
+            <p class="text-2xl mt-2">🏡 💧 🔥 🌲</p>
+        </footer>
+
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-8">
+            <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">Acceso de Administrador</h2>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="username" class="text-sm font-medium text-slate-700">Usuario</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-slate-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0..."/>
+                            </svg>
+                        </div>
+                        <input type="text" id="username" name="username" required class="block w-full pl-10 p-2.5 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Usuario">
+                    </div>
+                </div>
+                <div>
+                    <label for="password-input" class="text-sm font-medium text-slate-700">Contraseña</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-slate-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75..."/>
+                            </svg>
+                        </div>
+                        <input type="password" id="password-input" name="password-input" required class="block w-full pl-10 p-2.5 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Contraseña">
+                    </div>
+                </div>
+                <p id="login-error" class="text-sm text-red-600 text-center hidden"></p>
+                <div class="flex items-center justify-between gap-4 pt-2">
+                    <button id="login-cancel-btn" type="button" class="w-full py-2.5 px-4 text-sm font-semibold rounded-lg border border-slate-300 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Cancelar</button>
+                    <button type="submit" class="w-full py-2.5 px-4 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Ingresar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const icons = {
+                HomeIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9.75V19.5A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5V9.75"/></svg>`,
+                KeyIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a3 3 0 11-6 0 3 3 0 0..."/></svg>`,
+                ArrowUpOnSquareIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-3-3m3 3l3-3"/></svg>`,
+                SparklesIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M19 3v4M17 5h4"/></svg>`,
+                FireIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2a7 7 0 00-7 7c0 4 3 7 7 13 4-6 7-9 7-13a7 7 0 00-7-7z"/></svg>`,
+                WifiIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.05 6.05a15 15 0 0119.9 0M6.36 10.36a9 9 0 0111.28 0"/></svg>`,
+                WaterDropIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8.134 6.5 6 9 6 12.5A6 6 0 0018 12.5C18 9 15.866 6.5 12 2z"/></svg>`,
+                WrenchIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 13.3l6-6M2 21l7-7"/></svg>`,
+                BoltIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+                CogIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/></svg>`,
+                SunIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1M12 20v1M4.2 4.2l.7.7M19.1 19.1l.7.7"/></svg>`
+            };
+            const colors = {
+                sky: { bg: 'bg-sky-100', text: 'text-sky-700', hoverBg: 'hover:bg-sky-50', hoverText: 'hover:text-sky-700', ring: 'focus:ring-sky-500' },
+                rose: { bg: 'bg-rose-100', text: 'text-rose-700', hoverBg: 'hover:bg-rose-50', hoverText: 'hover:text-rose-700', ring: 'focus:ring-rose-500' },
+                amber: { bg: 'bg-amber-100', text: 'text-amber-700', hoverBg: 'hover:bg-amber-50', hoverText: 'hover:text-amber-700', ring: 'focus:ring-amber-500' },
+                violet: { bg: 'bg-violet-100', text: 'text-violet-700', hoverBg: 'hover:bg-violet-50', hoverText: 'hover:text-violet-700', ring: 'focus:ring-violet-500' },
+                teal: { bg: 'bg-teal-100', text: 'text-teal-700', hoverBg: 'hover:bg-teal-50', hoverText: 'hover:text-teal-700', ring: 'focus:ring-teal-500' },
+                emerald: { bg: 'bg-emerald-100', text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-50', hoverText: 'hover:text-emerald-700', ring: 'focus:ring-emerald-500' },
+                indigo: { bg: 'bg-indigo-100', text: 'text-indigo-700', hoverBg: 'hover:bg-indigo-50', hoverText: 'hover:text-indigo-700', ring: 'focus:ring-indigo-500' },
+                lime: { bg: 'bg-lime-100', text: 'text-lime-700', hoverBg: 'hover:bg-lime-50', hoverText: 'hover:text-lime-700', ring: 'focus:ring-lime-500' },
+                slate: { bg: 'bg-slate-100', text: 'text-slate-700', hoverBg: 'hover:bg-slate-50', hoverText: 'hover:text-slate-700', ring: 'focus:ring-slate-500' },
+            };
+            const contentData = [
+                { id: 'descripcion', title: 'Descripción de la casa', icon: icons.HomeIcon, items: ['**Planta baja:** living comedor amplio, cocina y toilette.', '**Planta alta:** una habitación matrimonial.'] },
+                { id: 'seguridad', title: 'Seguridad y acceso', icon: icons.KeyIcon, items: ['**Al llegar:** Cargar la clave provista en el panel a la derecha de la puerta. Ingresar únicamente los 4 dígitos.'] },
+                { id: 'ultimo-dia', title: 'Al dejar la casa el último día', icon: icons.ArrowUpOnSquareIcon, items: ['Apagar el calefón y **cerrar la llave de paso del gas.**', 'Cerrar todas las puertas y ventanas.'] },
+                { id: 'servicios', title: 'Servicios de la vivienda', icon: icons.SparklesIcon, items: ['La casa cuenta con gas envasado (garrafa), electricidad, internet, lavarropas y agua de pozo.'] },
+                { id: 'gas', title: 'Gas (garrafa)', icon: icons.FireIcon, items: ['La garrafa es de **45 kg**.', 'En caso de que se agote, solicitar recarga a los proveedores (contactos en la **puerta**).'] },
+                { id: 'internet', title: 'Internet', icon: icons.WifiIcon, items: ['**Red:** Casa Esperanza', '**Clave:** manolo2020'], color: colors.teal },
+                { id: 'agua', title: 'Agua', icon: icons.WaterDropIcon, items: ['El agua es **potable** y proviene de pozo.', 'Es normal que tenga características distintas al agua de red (color o sabor).'] },
+                { id: 'pozo-ciego', title: 'Pozo ciego', icon: icons.WrenchIcon, items: ['Se encuentra en la parte posterior de la casa, hacia la derecha.', '**Evitar caminar por esa zona.**', 'No arrojar residuos.'] },
+                { id: 'electricidad', title: 'Electricidad', icon: icons.BoltIcon, items: ['La vivienda cuenta con electricidad de red.', 'En caso de corte eléctrico, verificar las térmicas que se encuentran en el tablero.'] },
+                { id: 'bomba', title: 'Bomba presurizadora', icon: icons.CogIcon, items: ['Aumenta la presión del agua y funciona de manera automática al detectar consumo.', 'Evitar dejar canillas abiertas por largos períodos.'] },
+                { id: 'lavarropas', title: 'Lavarropas', icon: icons.WrenchIcon, items: ['Dispone de lavarropas, centrifugadora y tender.', 'El lavado y el centrifugado se realizan en dos artefactos distintos.'] },
+                { id: 'calefaccion', title: 'Calefacción', icon: icons.FireIcon, items: ['La casa cuenta con dos calefactores a leña, uno en planta baja y otro en el primer piso.', '**No utilizar leña húmeda.**'] },
+                { id: 'exterior', title: 'Exterior', icon: icons.SunIcon, items: ['Cuenta con **riego automatizado** en el frente y el fondo, que se activa automáticamente durante la madrugada.', 'La zona del jardín tiene piedra suelta, tenga cuidado.'] },
+            ];
+
+            // State
+            let isEditing = false;
+            
+            // Elements
+            const appContainer = document.getElementById('app-container');
+            const sectionsContainer = document.getElementById('sections-container');
+            const desktopNavLinks = document.getElementById('desktop-nav-links');
+            const mobileNavLinks = document.getElementById('mobile-nav-links');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileNavContainer = document.getElementById('mobile-nav-container');
+            const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+            const mobileNavPanel = document.getElementById('mobile-nav-panel');
+            const mobileNavCloseBtn = document.getElementById('mobile-nav-close-btn');
+            const adminToggleBtn = document.getElementById('admin-toggle-btn');
+            const adminIconEdit = document.getElementById('admin-icon-edit');
+            const adminIconSave = document.getElementById('admin-icon-save');
+            const adminTooltipText = document.getElementById('admin-tooltip-text');
+            const loginModal = document.getElementById('login-modal');
+            const loginForm = document.getElementById('login-form');
+            const loginCancelBtn = document.getElementById('login-cancel-btn');
+            const loginError = document.getElementById('login-error');
+
+
+            // --- Render Functions ---
+            const parseItem = (itemText) => {
+                return itemText.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900">$1</strong>');
+            };
+
+            const renderSections = () => {
+                sectionsContainer.innerHTML = '';
+                desktopNavLinks.innerHTML = '';
+                mobileNavLinks.innerHTML = '';
+
+                contentData.forEach(section => {
+                    // Create Section Card
+                    const sectionEl = document.createElement('section');
+                    sectionEl.id = section.id;
+                    sectionEl.className = 'bg-white rounded-xl shadow-md scroll-mt-20';
+                    sectionEl.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="${section.color && section.color.bg ? section.color.bg : 'bg-slate-100'} ${section.color &...
